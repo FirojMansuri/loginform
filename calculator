@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+    body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.calculator {
+    width: 320px;
+    background: #f545;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 10px;
+}
+
+.display {
+    height: 60px;
+    line-height: 60px;
+    background: #333;
+    color: #fff;
+    font-size: 24px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+button {
+    height: 60px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 2px;
+}
+
+.operator {
+    background: #ff9900;
+    color: #fff;
+}
+
+.digit, #clear {
+    background: #f0f0f0;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display"></div>
+        <div class="buttons">
+            <button class="operator" id="clear">C</button>
+            <button class="digit" id="7">7</button>
+            <button class="digit" id="8">8</button>
+            <button class="digit" id="9">9</button>
+             <button class="operator" id="divide">/</button>
+
+            <button class="digit" id="4">4</button>
+            <button class="digit" id="5">5</button>
+            <button class="digit" id="6">6</button>
+            <button class="operator" id="multiply">*</button>
+
+            <button class="digit" id="1">1</button>
+            <button class="digit" id="2">2</button>
+            <button class="digit" id="3">3</button>
+            <button class="operator" id="subtract">-</button>
+
+            <button class="digit" id="0">0</button>
+            <button class="digit" id="00">00</button>
+            <button class="digit" id="decimal">.</button>
+            <button class="operator" id="add">+</button>
+            <button class="operator" id="calculate">=</button>
+        </div>
+    </div>
+    <script >
+    document.addEventListener("DOMContentLoaded", function () {
+    const display = document.getElementById("display");
+    const buttons = document.querySelectorAll("button");
+
+    let currentInput = "";
+    let operator = "";
+    let previousInput = "";
+
+    buttons.forEach((button) => {
+        button.addEventListener("click", function () {
+            const value = button.textContent;
+
+            if (value >= "0" && value <= "9" || value === ".") {
+                currentInput += value;
+            } else if (value === "C") {
+                clear();
+            } else if (value === "=") {
+                calculate();
+            } else {
+                if (operator) {
+                    calculate();
+                }
+                operator = value;
+                previousInput = currentInput;
+                currentInput = "";
+            }
+
+            display.textContent = currentInput || previousInput;
+        });
+    });
+
+    function clear() {
+        currentInput = "";
+        operator = "";
+        previousInput = "";
+    }
+
+    function calculate() {
+        if (!previousInput || !currentInput) return;
+        const num1 = parseFloat(previousInput);
+        const num2 = parseFloat(currentInput);
+
+        switch (operator) {
+            case "+":
+                currentInput = (num1 + num2).toString();
+                break;
+            case "-":
+                currentInput = (num1 - num2).toString();
+                break;
+            case "*":
+                currentInput = (num1 * num2).toString();
+                break;
+            case "/":
+                currentInput = (num1 / num2).toString();
+                break;
+        }
+
+        previousInput = "";
+        operator = "";
+    }
+});
+</script>
+</body>
+</html>
