@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Form</title>
+   <style>
+   body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ff43;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+    margin: 5px 0;
+}
+
+form label {
+    display: block;
+}
+
+form input, form select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+form input[type="checkbox"] {
+    margin-right: 0px;
+}
+
+.buttons {
+    text-align: right;
+}
+
+button {
+    padding: 15px 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    cursor: pointer;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+#popupData {
+    list-style: none;
+    padding: 0;
+}
+
+#popupData li {
+    margin: 5px 0;
+}
+
+   </style>
+</head>
+<body>
+    <div class="container">
+        <form id="surveyForm">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" required>
+                    <option value="1">Select Country</option>
+                   <option value="2">India</option>
+                   <option value="3">USA</option>
+                   <option value="4">UK</option>
+                   <option value="5">China</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Gender:</label>
+                <input type="checkbox" id="male" name="gender" value="Male"> <label for="male">Male</label>
+                <input type="checkbox" id="female" name="gender" value="Female" style='padding:11px'> <label for="female">Female</label>
+            </div>
+            <div class="form-group">
+                <label for="profession">Profession:</label>
+                <input type="text" id="profession" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+  			  <label for="mobile">Mobile Number:</label>
+  		  <input type="tel" id="mobile" pattern="[0-9]*" required  inputmode="numeric">
+   	 		<span class="error">Please enter a valid mobile number.</span>
+			</div>
+
+            <div class="buttons">
+                <button type="button" id="resetButton">Reset</button>
+                <button type="submit" id="submitButton">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <span class="close" id="closePopup">&times;</span>
+            <h2> Form Submission</h2>
+            <ul id="popupData"></ul>
+        </div>
+    </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const surveyForm = document.getElementById("surveyForm");
+    const popup = document.getElementById("popup");
+    const popupData = document.getElementById("popupData");
+    const closePopup = document.getElementById("closePopup");
+
+    surveyForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        displayPopup();
+    });
+
+    closePopup.addEventListener("click", function () {
+        closePopup.style.display = "none";
+        popupData.innerHTML = "";
+        surveyForm.reset();
+    });
+
+    function displayPopup() {
+        const firstName = document.getElementById("firstName").value;
+        const lastName = document.getElementById("lastName").value;
+        const dob = document.getElementById("dob").value;
+        const country = document.getElementById("country").value;
+        const gender = document.querySelectorAll('input[name="gender"]:checked');
+        const profession = document.getElementById("profession").value;
+        const email = document.getElementById("email").value;
+        const mobile = document.getElementById("mobile").value;
+
+        const genderValues = Array.from(gender).map((item) => item.value);
+
+        const data = [
+            `First Name: ${firstName}`,
+            `Last Name: ${lastName}`,
+            `Date of Birth: ${dob}`,
+            `Country: ${country}`,
+            `Gender: ${genderValues.join(", ")}`,
+            `Profession: ${profession}`,
+            `Email: ${email}`,
+            `Mobile Number: ${mobile}`,
+        ];
+
+        popupData.innerHTML = "";
+        data.forEach((item) => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            popupData.appendChild(li);
+        });
+
+        popup.style.display = "flex";
+    }
+});
+
+    </script>
+</body>
+</html>
